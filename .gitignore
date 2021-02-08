@@ -1,0 +1,8 @@
+
+.idea/
+.vscode/
+datasets_RAW/
+*.hdf5
+*.log
+*.png
+*.pyc
