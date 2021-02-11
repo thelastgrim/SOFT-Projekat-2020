@@ -3,6 +3,9 @@
 .vscode/
 datasets_RAW/
 *.hdf5
+*.h5
 *.log
 *.png
 *.pyc
+*.jpeg
+*.jpg
