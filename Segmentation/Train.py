@@ -77,8 +77,7 @@ def train():
                             'xrays',
                             'blured', 
                             train_generator_args,
-                            target_size=(512,512),
-                            save_to_dir=os.path.abspath(Constants.OUTPUT_AUG_DIR))
+                            target_size=(512,512))
 
     
 
@@ -106,9 +105,9 @@ def train():
     save_result(Constants.OUTPUT_TEST_DIR, results, test_files)
 
     
-    model_json = Model.model().to_json()
-    with open("model.json", "w") as json_file:
-        json_file.write(model_json)
+    #model_json = Model.model().to_json()
+    #with open("model.json", "w") as json_file:
+     #   json_file.write(model_json)
     # serialize weights to HDF5
     #Model.model().save_weights("model.h5")
     print("Saved model to disk")
