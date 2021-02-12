@@ -31,7 +31,7 @@ def start():
     #------------------
 
     #data = pd.read_csv('datasets_FINAL/test/chest_xray_metadata.csv') #promeni putanju do lokalnog foldera ako je potrebno !!!
-    data = pd.read_csv('content/dataset-x-ray/624.csv')
+    data = pd.read_csv('datasets_FINAL/train/00_train.csv')
 
     #print(data.columns)
     data.shape
@@ -46,7 +46,8 @@ def start():
     #xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_DIR, "*.jpeg"))
      #           if("_merged" in test_file)]
 
-    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_DIR, "*.jpeg"))]
+    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_TRAIN_DIR, "*.jpeg")) \
+                if ("_merged" in test_file)]
 
     print(len(xray))
     #for i in tqdm(range(142)):
@@ -110,7 +111,7 @@ def start():
     LEARNING_RATE =0.0005 #start off with high rate first 0.001 #5e-4
 
 
-    conv_base = VGG16(weights='imagenet',
+    conv_base = VGG16(weights='vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5',
                     include_top=False,
                     input_shape=(224, 224, 3))
 
@@ -125,11 +126,11 @@ def start():
 
 
     model.compile(loss='binary_crossentropy',             
-                optimizer=optimizers.Adam(lr=LEARNING_RATE),
+                optimizer=optimizers.SGD(lr=LEARNING_RATE, momentum = 0.0, nesterov = True, name = "SGD"),
                 metrics=['accuracy'])
 
     #model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=["accuracy"])
-    epochs = 3
+    epochs = 15
 
     '''
     from tensorflow.keras.callbacks import EarlyStopping
@@ -214,7 +215,7 @@ def start():
     #test_data = pd.read_csv('/content/ori-projekat/X-Ray-test/metadata/chest_xray_test_dataset.csv')
 
     #test_data = pd.read_csv('metadata-test/chest_xray_test_dataset.csv') #ovo
-    test_data = pd.read_csv('content/dataset-x-ray/128.csv') #OVDE SAMO STAVIS PUTANJU DO CSV FAJLA SLIKA ZA KOJE ZELIS PREDIKCIJU
+    test_data = pd.read_csv('datasets_FINAL/test/00_test.csv') #OVDE SAMO STAVIS PUTANJU DO CSV FAJLA SLIKA ZA KOJE ZELIS PREDIKCIJU
 
     #--------------------------
     Y_test_data = []
@@ -223,7 +224,7 @@ def start():
     y_test_data = y_test_data.to_numpy()
     # y.shape
 
-    for i in tqdm(range(127)):
+    for i in tqdm(range(98)):
         #for i in tqdm(range(data.shape[0])):
         # print(y[i])
         if (pd.isnull(y_test_data[i])):
@@ -251,7 +252,8 @@ def start():
    # xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_TEST_DIR, "*.jpeg"))
     #            if("_merged" in test_file)]
 
-    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_TEST_DIR, "*.jpeg*"))]
+    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_TEST_DIR, "*.jpeg"))\
+                if ("_merged" in test_file)]
 
     X_test_data = []
     for i in range(len(xray)):
@@ -302,32 +304,38 @@ def start():
     print("Test accuracy: ", score[1])
     '''
     #ili ovo
-
+    
     test_loss, test_acc = model.evaluate(X_test,  y_test, verbose=2) # ovo je sa tensorflow sajta
     print("Test loss: ", test_loss)
     print("Test accuracy: ", test_acc)
 
 
     print("HIT: " + str(hit) + "    MISS: " +  str(miss))
+    
 
 
 def new_function():
-    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_DIR, "*.jpeg")) \
+    xray = [test_file for test_file in glob(os.path.join(Constants.FINAL_TRAIN_DIR, "*.jpeg")) \
                 if ("_resized" not in test_file)]
-  
-    with open('datasets_FINAL/test/chest_xray_metadata.csv', 'r') as inp, open('first_edit.csv', 'w') as out:
+    print(len(xray), "duzina")
+    
+    with open('datasets_FINAL/test/FF.csv', 'r') as inp, open('3rd_edit.csv', 'w') as out:
         writer = csv.writer(out)
         counter = 1
       
         for row in csv.reader(inp):
-            print(row[1])
+            #print(row[1])
             for i in range(len(xray)):
                 row_name = row[1].replace(".jpeg","").replace(".jpg", "")
-                if row_name in xray[i]:
+                xx = xray[i].split("\\")[2].replace(".jpeg", "")
+                #print (row_name, " vs ", xx)
+                if row_name == xx:
                     writer.writerow(row)
                     break
+                    
             print(counter)
             counter+=1
+   
 
 
         
