@@ -58,7 +58,6 @@ test_files = glob(os.path.join(Constants.OUTPUT_TEST_DIR, "*.png"))
 def train():
     test_files = [test_file for test_file in glob(os.path.join(Constants.OUTPUT_TEST_DIR, "*.png")) \
               if ("_mask" not in test_file \
-                  and "_dilate" not in test_file \
                   and "_blur" not in test_file)]
     print(test_files[0])
 
@@ -116,7 +115,7 @@ def train():
     
 
 
-def predictUsingSavedModel():
+def predictUsingSavedModel(directory):
 
     json_file = open('model.json', 'r')
     loaded_model_json = json_file.read()
@@ -126,12 +125,12 @@ def predictUsingSavedModel():
     loaded_model.load_weights("xray_model.hdf5")
     print("Loaded model from disk")
 
-    test_files = [test_file for test_file in glob(os.path.join(Constants.FINAL_DIR, "*.jpeg")) \
+    test_files = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
                 if ("_resized" in test_file)]
 
     test_gen = test_generator(test_files, target_size=(512,512))
     results = loaded_model.predict_generator(test_gen, len(test_files), verbose=1)
-    save_result(Constants.FINAL_DIR, results, test_files)
+    save_result(directory, results, test_files)
 
 
 

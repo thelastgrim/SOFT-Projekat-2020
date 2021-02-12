@@ -33,5 +33,6 @@ OUTPUT_AUG_DIR = os.path.join(OUTPUT_DIR, "aug")
     novi dataset koji sadrzi razlicite xray snimke od pocetnog seta
     obelezenih sa tipom pneumonije koji je prisutan na snimku
 '''
-FINAL_DIR = os.path.join("datasets_FINAL", "test")
+FINAL_TEST_DIR = os.path.join("datasets_FINAL", "test")
+FINAL_TRAIN_DIR = os.path.join("datasets_FINAL", "train")
 

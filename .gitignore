@@ -7,5 +7,5 @@ datasets_RAW/
 *.log
 *.png
 *.pyc
-*.jpeg
 *.jpg
+*.png
