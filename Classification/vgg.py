@@ -125,7 +125,7 @@ model.add(layers.Flatten())
 model.add(layers.Dense(256, activation='relu'))
 model.add(layers.Dense(3, activation='softmax')) 
 model.compile(loss='categorical_crossentropy',             
-            optimizer= opt#optimizers.SGD(lr=0.0001),
+            optimizer= opt,#optimizers.SGD(lr=0.0001),
             metrics=['accuracy'])
 epochs = 10
 
