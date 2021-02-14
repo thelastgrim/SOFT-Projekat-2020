@@ -124,7 +124,7 @@ def predictUsingSavedModel(directory):
     loaded_model.load_weights("xray_model.hdf5")
     print("Loaded model from disk")
 
-    test_files = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
+    test_files = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
                 if ("_resized" in test_file)]
 
     test_gen = test_generator(test_files, target_size=(512,512))

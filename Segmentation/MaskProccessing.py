@@ -5,7 +5,7 @@ from glob import glob
 import Segmentation.Constants as Constants
 
 def extract2Largest(directory):
-    masks = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
+    masks = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
               if ("_predict" in test_file)]
     
     c = 1
@@ -97,13 +97,13 @@ def extract2Largest(directory):
 
 def applyMaskToImage(directory):
 
-    xray = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
+    xray = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
               if ("_resized" in test_file \
                   and "_predict" not in test_file)]
 
-    masks = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
+    masks = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
               if ("_proccessed" in test_file)]
-    
+    print(len(xray), len(masks))
     for i in range(len(masks)):
         '''
         img = cv2.imread(xray[i])
@@ -122,16 +122,18 @@ def applyMaskToImage(directory):
         result_file = os.path.join("%s_merged%s" % (filename, fileext))    
         cv2.imwrite(result_file, result2)
         print("Processed (%d/%d)." % (i+1, len(masks)))
-
+    exit()
 
 def resize_xrays(directory):
     c = 0 
-    xray = [test_file for test_file in glob(os.path.join(directory, "*.jpeg")) \
+    xray = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
               if ("_proccessed" not in test_file \
                   and "_predict" not in test_file)]
     lent = len(xray)
     for image in xray:
+        #print(image)
         img = cv2.imread(image)
+        
         ressed = __resize_image(img, (512,512))
         filename, fileext = os.path.splitext(image)
         result_file = os.path.join("%s_resized%s" % (filename, fileext))
