@@ -91,41 +91,44 @@ Y = np.array(Y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state =0, test_size=0.15)
 
-opt = Adam(lr=3e-4)
+opt = Adam(lr=0.00001)
 
-base_model = VGG16(weights='vgg16_weights_tf_dim_ordering_tf_kernels.h5', input_shape=(224, 224, 3))
-model1 = models.Model(inputs=base_model.input, outputs=base_model.get_layer('flatten').output)
-#model1.compile()
-#model = models.Model(inputs=base_model.input, outputs=base_model.get_layer('fc1').output)
-#model1.output.set_shape(3)
-#model1.output = layers.Dense(3, activation='sigmoid')
-#plot_model(model1)
+
 model = Sequential()
-model.add(model1.get_layer(index= 0))
-model.add(model1.get_layer(index= 1))
-model.add(model1.get_layer(index= 2))
-model.add(model1.get_layer(index= 3))
-model.add(model1.get_layer(index= 4))
-model.add(model1.get_layer(index= 5))
-model.add(model1.get_layer(index= 6))
-model.add(model1.get_layer(index= 7))
-model.add(model1.get_layer(index= 8))
-model.add(model1.get_layer(index= 9))
-model.add(model1.get_layer(index= 10))
-model.add(model1.get_layer(index= 11))
-model.add(model1.get_layer(index= 12))
-model.add(model1.get_layer(index= 13))
-model.add(model1.get_layer(index= 14))
-model.add(model1.get_layer(index= 15))
-model.add(model1.get_layer(index= 16))
-#model.add(model1.get_layer(index= 17))
+model.add(Conv2D(filters=96, input_shape=(350,350,3), kernel_size=(11,11), strides=(4,4), padding='valid'))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
+model.add(Conv2D(filters=256, kernel_size=(11,11), strides=(1,1), padding='valid'))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
+model.add(Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(Activation('relu'))
+model.add(Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(Activation('relu'))
+model.add(Conv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
+model.add(Flatten())
+model.add(Dense(4096, input_shape=(350*350*3,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
+model.add(Dense(4096))
+model.add(Activation('relu'))
+model.add(Dropout(0.2))
+model.add(Dense(1000))
+model.add(Activation('relu'))
+model.add(Dropout(0.3))
+model.add(Dense(3))
+model.add(Activation('softmax'))
+
+model.summary()
+
+  
+opt = Adam(learning_rate=0.000007)
 
 
-model.add(layers.Flatten())
-model.add(layers.Dense(256, activation='relu'))
-model.add(layers.Dense(3, activation='softmax')) 
 model.compile(loss='categorical_crossentropy',             
-            optimizer= opt#optimizers.SGD(lr=0.0001),
+            optimizer=optimizers.SGD(lr=0.0001),
             metrics=['accuracy'])
 epochs = 10
 
@@ -138,20 +141,12 @@ number_of_epochs_it_ran = len(history.history['loss'])
 model.load_weights('.mdl_wts.hdf5')
 
 
-'''
-score = model.evaluate(X_test, y_test, verbose = 1)
-print("Test score: ", score[0])
-print("Test accuracy: ", score[1])
-'''
-#ili ovo
 
 test_loss, test_acc = model.evaluate(X_test,  y_test, verbose=2) # ovo je sa tensorflow sajta
 print("Test loss: ", test_loss)
 print("Test accuracy: ", test_acc)
 
 
-
-#nodel.acc
 
 print(">> STEP#4 VISUALIZING ACCURACY AND LOSS")
 acc = history.history['accuracy']
@@ -162,7 +157,6 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 
 epochs_range = range(epochs)
-#epochs_range = number_of_epochs_it_ran
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
