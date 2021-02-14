@@ -91,7 +91,7 @@ Y = np.array(Y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, random_state =0, test_size=0.15)
 
-opt = Adam(lr=0.00001)
+opt = Adam(lr=3e-4)
 
 base_model = VGG16(weights='vgg16_weights_tf_dim_ordering_tf_kernels.h5', input_shape=(224, 224, 3))
 model1 = models.Model(inputs=base_model.input, outputs=base_model.get_layer('flatten').output)
@@ -125,7 +125,7 @@ model.add(layers.Flatten())
 model.add(layers.Dense(256, activation='relu'))
 model.add(layers.Dense(3, activation='softmax')) 
 model.compile(loss='categorical_crossentropy',             
-            optimizer=optimizers.SGD(lr=0.0001),
+            optimizer= opt#optimizers.SGD(lr=0.0001),
             metrics=['accuracy'])
 epochs = 10
 

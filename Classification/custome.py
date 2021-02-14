@@ -124,7 +124,7 @@ model.add(Activation('softmax'))
 model.summary()
 
   
-opt = SGD(learning_rate=0.001)
+opt = Adam(learning_rate=0.000007)
 
 
 model.compile(loss='categorical_crossentropy',             
