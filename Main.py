@@ -1,12 +1,12 @@
 from Segmentation import Merger as merger
 from Segmentation import Train as train
 from Segmentation import MaskProccessing as mp
-from Segmentation import vgg as vgg
+from Classification import vgg
 from Segmentation import Constants as Constants
 def main():
     # popunjava test i train u proccessed
     #merger.merge()
-    # # train.train() mreza je vec istrenirana i sacuvana
+    #train.train() #mreza je vec istrenirana i sacuvana
 
     #mp.resize_xrays(Constants.FINAL_TRAIN_DIR)
     #mp.resize_xrays(Constants.FINAL_TEST_DIR)
