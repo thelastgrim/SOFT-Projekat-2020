@@ -125,7 +125,8 @@ def predictUsingSavedModel(directory):
     print("Loaded model from disk")
 
     test_files = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
-                if ("_resized" in test_file)]
+                if ("_resized" in test_file \
+                    and ".csv" not in test_file)]
 
     test_gen = test_generator(test_files, target_size=(512,512))
     results = loaded_model.predict_generator(test_gen, len(test_files), verbose=1)

@@ -6,7 +6,8 @@ import Segmentation.Constants as Constants
 
 def extract2Largest(directory):
     masks = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
-              if ("_predict" in test_file)]
+              if ("_predict" in test_file \
+                  and ".csv" not in test_file)]
     
     c = 1
     lent = len(masks)
@@ -119,7 +120,11 @@ def applyMaskToImage(directory):
 
     
         filename, fileext = os.path.splitext(xray[i])
+        route = filename.split("\\")
+        filename = route[0] + "\\"+route[1]+"\\"+"merged\\"+route[2]
         result_file = os.path.join("%s_merged%s" % (filename, fileext))    
+        
+    
         cv2.imwrite(result_file, result2)
         print("Processed (%d/%d)." % (i+1, len(masks)))
     exit()
@@ -128,10 +133,12 @@ def resize_xrays(directory):
     c = 0 
     xray = [test_file for test_file in glob(os.path.join(directory, "*.*")) \
               if ("_proccessed" not in test_file \
-                  and "_predict" not in test_file)]
+                  and "_predict" not in test_file
+                  and ".csv" not in test_file)]
     lent = len(xray)
     for image in xray:
-        #print(image)
+        print(image)
+        
         img = cv2.imread(image)
         
         ressed = __resize_image(img, (512,512))
